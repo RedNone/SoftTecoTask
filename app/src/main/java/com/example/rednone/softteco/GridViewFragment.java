@@ -3,13 +3,11 @@ package com.example.rednone.softteco;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -47,9 +45,9 @@ public class GridViewFragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                TextView textView = (TextView) view.findViewById(R.id.textViewId);
-                Log.d("TAG", textView.getText().toString());
+                DataModel dataModel = list.get(position);
+                ((MainActivity) getActivity()).setPostId(Integer.parseInt(dataModel.getId()));
+                ((MainActivity) getActivity()).downloadData(UserFragment.TAG, Integer.parseInt(dataModel.getUserId()));
 
             }
         });

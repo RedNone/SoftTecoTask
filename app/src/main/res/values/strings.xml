@@ -6,4 +6,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="save_log">Save Log</string>
     <string name="idMain">ID:  %1$s</string>
+    <string name="userEmail">Email: %1$s</string>
+    <string name="UserSite">Web site: %1$s</string>
+    <string name="UserTelephone">Phone number: %1$s</string>
+    <string name="UserCity">City: %1$s</string>
+    <string name="ToolbarUser">Contact #%1$s</string>
 </resources>

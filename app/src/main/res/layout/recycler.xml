@@ -10,7 +10,7 @@
         android:id="@+id/textViewId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="@string/idMain" />
+        android:text="@string/idMain" />
 
     <TextView
         android:id="@+id/textViewTitle"

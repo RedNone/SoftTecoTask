@@ -1,12 +1,13 @@
 package com.example.rednone.softteco;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -38,16 +39,21 @@ public class MainActivity extends AppCompatActivity {
     private String TAG = "MainActivity";
 
     private FragmentManager manager;
-    private  FragmentTransaction transaction;
+    private FragmentTransaction transaction;
+
+    private List<DataModel> postsList;
+    private UsersData usersData;
+
+    private int postId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        setFragment(MainFragment.TAG, 0);
+        manager = getSupportFragmentManager();
+
+        setFragment(MainFragment.TAG);
 
         retrofit = new Retrofit.Builder()
                 .baseUrl("http://jsonplaceholder.typicode.com/")
@@ -55,51 +61,89 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         intfObj = retrofit.create(getJs.class);
 
-        downloadData(MainFragment.TAG);
+        downloadData(MainFragment.TAG, 0);
+
+
+        Log.d(MainFragment.TAG, "onCreate");
 
     }
 
-    private void setFragment(String TAG,int id)
-    {
-        manager = getSupportFragmentManager();
+    private void setFragment(String TAG) {
+
         transaction = manager.beginTransaction();
 
-     switch (TAG)
-     {
-         case "MainFragment":
-             if(manager.findFragmentByTag(MainFragment.TAG) == null)
-             {
-                 AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
-                 appBarLayout.setVisibility(View.INVISIBLE);
-                 transaction.add(R.id.mainConteiner, new MainFragment(), MainFragment.TAG);
-             }
-             break;
-         default:
-             Log.d(this.TAG, "Incorrect Fragment");
-             break;
+        switch (TAG) {
+            case "MainFragment":
+                if (manager.findFragmentByTag(MainFragment.TAG) == null) {
+                    transaction.add(R.id.mainConteiner, new MainFragment(), MainFragment.TAG);
+                }
+                break;
+            case "UserFragment":
 
-     }
+                if (manager.findFragmentByTag(UserFragment.TAG) == null) {
+                    UserFragment obj = (UserFragment) UserFragment.getNewInstance(postId, usersData);
+                    transaction.replace(R.id.mainConteiner, obj, UserFragment.TAG);
+                    transaction.addToBackStack(null);
+                }
+                break;
+            default:
+                Log.d(this.TAG, "Incorrect Fragment");
+                break;
+
+
+        }
 
         transaction.commit();
 
     }
 
-    private void downloadData(String tag)
-    {
-        switch (tag)
-        {
+    public List<DataModel> getPostsList() {
+        return postsList;
+    }
+
+    public void setPostId(int postId) {
+        this.postId = postId;
+    }
+
+    public void downloadData(String tag, int id) {
+        switch (tag) {
             case "MainFragment":
                 intfObj.getData().enqueue(new Callback<List<DataModel>>() {
                     @Override
                     public void onResponse(Call<List<DataModel>> call, Response<List<DataModel>> response) {
-                        MainFragment obj = (MainFragment) manager.findFragmentByTag(MainFragment.TAG);
-                        obj.getData(response.body());
+                        if (response.isSuccessful()) {
+                            MainFragment obj = (MainFragment) manager.findFragmentByTag(MainFragment.TAG);
+                            postsList = response.body();
+                            obj.getData(postsList);
+                        } else {
+                            Log.d(TAG, "Response: " + response.isSuccessful());
+                        }
 
                     }
 
                     @Override
                     public void onFailure(Call<List<DataModel>> call, Throwable t) {
-                        Log.d("TAG", "бедаа");
+                        Log.d(TAG, "Data download fail");
+                    }
+                });
+                break;
+            case "UserFragment":
+                intfObj.getUserData(id).enqueue(new Callback<UsersData>() {
+                    @Override
+                    public void onResponse(Call<UsersData> call, Response<UsersData> response) {
+                        if (response.isSuccessful()) {
+                            usersData = response.body();
+                            setFragment(UserFragment.TAG);
+                        } else {
+
+                            Log.d(TAG, "Response: " + response.isSuccessful());
+                        }
+                    }
+
+
+                    @Override
+                    public void onFailure(Call<UsersData> call, Throwable t) {
+                        Log.d(TAG, "Data download fail");
                     }
                 });
                 break;
