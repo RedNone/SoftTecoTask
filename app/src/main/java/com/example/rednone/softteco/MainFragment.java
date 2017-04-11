@@ -48,7 +48,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         list = new ArrayList<>();
@@ -62,13 +61,13 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         button.setVisibility(View.INVISIBLE);
         button.setOnClickListener(this);
 
-        Log.d(TAG, "onCreateView" + " " + this.hashCode());
 
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                for (int i = 0; i < dotsCount; i++) {
+                for (int i = 0; i < dotsCount; i++)
+                {
                     dots[i].setTextColor(getResources().getColor(android.R.color.darker_gray));
                 }
                 dots[position].setTextColor(getResources().getColor(R.color.app_green));
@@ -104,16 +103,15 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
+
         list = ((MainActivity) getActivity()).getPostsList();
         if (list != null) {
-            Log.d(TAG, list.toString());
             getData(list);
             viewPagerAdapter.notifyDataSetChanged();
         }
@@ -122,9 +120,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     public void getData(List<DataModel> list) {
 
-        viewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager(), list);
+        viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), list);
         viewPager.setAdapter(viewPagerAdapter);
-        viewPager.setCurrentItem(0);
         setUiPageViewController();
     }
 
@@ -133,7 +130,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         dotsCount = viewPagerAdapter.getCount();
         dots = new TextView[dotsCount];
 
-        for (int i = 0; i < dotsCount; i++) {
+        for (int i = 0; i < dotsCount; i++)
+        {
             dots[i] = new TextView(getContext());
             dots[i].setText(Html.fromHtml("&#8226;"));
             dots[i].setTextSize(30);

@@ -11,4 +11,6 @@
     <string name="UserTelephone">Phone number: %1$s</string>
     <string name="UserCity">City: %1$s</string>
     <string name="ToolbarUser">Contact #%1$s</string>
+    <string name="userName">Name: %1$s</string>
+    <string name="userNickName">NickName: %1$s</string>
 </resources>

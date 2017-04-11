@@ -50,14 +50,14 @@
                     android:id="@+id/NameTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
+                    android:text="@string/userName"
                     android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/NickNametextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
+                    android:text="@string/userNickName"
                     android:textSize="24sp" />
             </LinearLayout>
         </LinearLayout>

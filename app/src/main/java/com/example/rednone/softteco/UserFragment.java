@@ -93,8 +93,11 @@ public class UserFragment extends Fragment implements View.OnClickListener {
     public void setUserData() {
 
         String str = "";
-        nameTextView.setText(usersData.getName());
-        nickNameTextView.setText(usersData.getUsername());
+        str = getContext().getResources().getString(R.string.userName);
+        nameTextView.setText(String.format(str, usersData.getName()));
+
+        str = getContext().getResources().getString(R.string.userNickName);
+        nickNameTextView.setText(String.format(str, usersData.getUsername()));
 
         str = getContext().getResources().getString(R.string.userEmail);
         emailTextView.setText(String.format(str, usersData.getEmail()));
@@ -126,7 +129,7 @@ public class UserFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.CityTextView:
-                intent = new Intent(Intent.ACTION_VIEW,Uri.parse("geo:" + usersData.address.geo.getLat() + "," + usersData.address.geo.getLng()));
+                intent = new Intent(Intent.ACTION_VIEW,Uri.parse("geo:" + usersData.address.geo.getLng() + "," + usersData.address.geo.getLat()  ));
                 startActivity(intent);
                 break;
         }

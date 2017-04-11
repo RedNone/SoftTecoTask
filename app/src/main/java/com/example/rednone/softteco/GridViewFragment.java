@@ -38,7 +38,7 @@ public class GridViewFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_grid_view, container, false);
 
-        arrayAdapter = new GridAdapter(getContext(),R.layout.recycler,list);
+        arrayAdapter = new GridAdapter(getContext(),R.layout.grid_data,list);
         gridView = (GridView) view.findViewById(R.id.gridview);
         gridView.setAdapter(arrayAdapter);
         gridView.setNumColumns(3);

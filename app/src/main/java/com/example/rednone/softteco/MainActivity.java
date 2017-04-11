@@ -62,10 +62,6 @@ public class MainActivity extends AppCompatActivity {
         intfObj = retrofit.create(getJs.class);
 
         downloadData(MainFragment.TAG, 0);
-
-
-        Log.d(MainFragment.TAG, "onCreate");
-
     }
 
     private void setFragment(String TAG) {
@@ -81,20 +77,15 @@ public class MainActivity extends AppCompatActivity {
             case "UserFragment":
 
                 if (manager.findFragmentByTag(UserFragment.TAG) == null) {
-                    UserFragment obj = (UserFragment) UserFragment.getNewInstance(postId, usersData);
-                    transaction.replace(R.id.mainConteiner, obj, UserFragment.TAG);
+                    transaction.replace(R.id.mainConteiner, UserFragment.getNewInstance(postId, usersData), UserFragment.TAG);
                     transaction.addToBackStack(null);
                 }
                 break;
             default:
                 Log.d(this.TAG, "Incorrect Fragment");
                 break;
-
-
         }
-
         transaction.commit();
-
     }
 
     public List<DataModel> getPostsList() {
@@ -108,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
     public void downloadData(String tag, int id) {
         switch (tag) {
             case "MainFragment":
+
                 intfObj.getData().enqueue(new Callback<List<DataModel>>() {
                     @Override
                     public void onResponse(Call<List<DataModel>> call, Response<List<DataModel>> response) {
@@ -126,8 +118,10 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, "Data download fail");
                     }
                 });
+
                 break;
             case "UserFragment":
+
                 intfObj.getUserData(id).enqueue(new Callback<UsersData>() {
                     @Override
                     public void onResponse(Call<UsersData> call, Response<UsersData> response) {
@@ -146,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, "Data download fail");
                     }
                 });
+                
                 break;
             default:
                 Log.d(this.TAG, "Incorrect DataTAG");
