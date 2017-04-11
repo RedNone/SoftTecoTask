@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -79,6 +80,7 @@ public class UserFragment extends Fragment implements View.OnClickListener {
                 DbModel dbModel = new DbModel(usersData.getName(),usersData.getUsername(),usersData.getEmail(),
                                               usersData.getWebsite(),usersData.getPhone(),usersData.address.getCity());
                 dbModel.save();
+                Toast.makeText(getContext(), "Data saved", Toast.LENGTH_SHORT).show();
             }
         });
 

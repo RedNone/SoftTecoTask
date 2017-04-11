@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, "Data download fail");
                     }
                 });
-                
+
                 break;
             default:
                 Log.d(this.TAG, "Incorrect DataTAG");
