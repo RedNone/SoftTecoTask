@@ -33,7 +33,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    final String FILENAME = "LogFile";
+
     private getJs intfObj;
     private Retrofit retrofit;
     private String TAG = "MainActivity";
@@ -148,64 +148,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void writeFile() {
-        WriteLog writeLog = new WriteLog();
-        writeLog.execute();
-    }
-
-    class WriteLog extends AsyncTask<Void, Void, Void> {
-
-        Button button;
-        BufferedWriter bufferedWriter;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            button = (Button) findViewById(R.id.buttonLog);
-            button.setEnabled(false);
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-                Process process = Runtime.getRuntime().exec("logcat -d long *:*");
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                bufferedWriter = new BufferedWriter(new OutputStreamWriter(openFileOutput(FILENAME, MODE_PRIVATE)));
-
-                String str;
-                while ((str = reader.readLine()) != null) {
-
-                    Log.d(TAG, str);
-
-                    bufferedWriter.write(str);
-                    bufferedWriter.newLine();
-
-                }
-            } catch (FileNotFoundException e) {
-                Log.e(TAG, String.valueOf(e));
-            } catch (IOException e) {
-                Log.e(TAG, String.valueOf(e));
-            } finally {
-                try {
-                    if (bufferedWriter != null)
-                        bufferedWriter.close();
-                } catch (IOException ex) {
-                    Log.e(TAG, String.valueOf(ex));
-                }
-
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            button.setEnabled(true);
-        }
-
-
-    }
 }

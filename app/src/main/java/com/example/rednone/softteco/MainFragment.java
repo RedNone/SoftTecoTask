@@ -1,6 +1,7 @@
 package com.example.rednone.softteco;
 
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,8 +21,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -37,6 +46,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private ViewPagerAdapter viewPagerAdapter;
     private ImageView imageView;
     private Button button;
+    final String FILENAME = "LogFile";
 
     public static String TAG = "MainFragment";
 
@@ -144,10 +154,63 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        ((MainActivity) getActivity()).writeFile();
+        WriteLog writeLog = new WriteLog();
+        writeLog.execute();
     }
 
+    class WriteLog extends AsyncTask<Void, Void, Void> {
 
 
+        BufferedWriter bufferedWriter;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            button.setEnabled(false);
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            try {
+                Process process = Runtime.getRuntime().exec("logcat -d long *:*");
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                bufferedWriter = new BufferedWriter(new OutputStreamWriter(getContext().openFileOutput(FILENAME, MODE_PRIVATE)));
+
+                String str;
+                while ((str = reader.readLine()) != null) {
+
+                    Log.d(TAG, str);
+
+                    bufferedWriter.write(str);
+                    bufferedWriter.newLine();
+
+                }
+            } catch (FileNotFoundException e) {
+                Log.e(TAG, String.valueOf(e));
+            } catch (IOException e) {
+                Log.e(TAG, String.valueOf(e));
+            } finally {
+                try {
+                    if (bufferedWriter != null)
+                        bufferedWriter.close();
+                } catch (IOException ex) {
+                    Log.e(TAG, String.valueOf(ex));
+                }
+
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            button.setEnabled(true);
+        }
+
+
+    }
 
 }
